@@ -148,9 +148,15 @@
           </table>
           <div class="description"><p>Map</p> </div>
           <pre><code class="language-javascript">function Map(map) {
+
+    // initialize info window
     this.infoWindow = new google.maps.InfoWindow({
         content: &quot;holding...&quot;
     });
+
+    // add watermark
+    map.overlayMapTypes.insertAt(0, new CoordMapType(new google.maps.Size(512, 512)));
+
 }</code></pre>
           <section id="Map">
             <h1>Map</h1>
@@ -543,6 +549,19 @@ if (object.hasOwnProperty('position')) {//marker
     return fruskac.TYPE.KML;
 }
     }
+
+    function CoordMapType(tileSize) {
+this.tileSize = tileSize;
+    }
+
+    CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
+var div = ownerDocument.createElement('div');
+div.innerHTML = '&lt;img src=&quot;//fruskac.net/sites/all/themes/fruskac/css/img/fruskac-logo-map.png&quot; width=&quot;100%&quot; height=&quot;auto&quot;&gt;';
+div.style.width = this.tileSize.width + 'px';
+div.style.height = this.tileSize.height + 'px';
+div.style.opacity = '.5';
+return div;
+    };
 
     return Map;
 

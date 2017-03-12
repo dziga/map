@@ -9,9 +9,15 @@ fruskac.Map = (function () {
      * @constructor
      */
     function Map(map) {
+
+        // initialize info window
         this.infoWindow = new google.maps.InfoWindow({
             content: "holding..."
         });
+
+        // add watermark
+        map.overlayMapTypes.insertAt(0, new CoordMapType(new google.maps.Size(512, 512)));
+
     }
 
     /**
@@ -224,6 +230,19 @@ fruskac.Map = (function () {
             return fruskac.TYPE.KML;
         }
     }
+
+    function CoordMapType(tileSize) {
+        this.tileSize = tileSize;
+    }
+
+    CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
+        var div = ownerDocument.createElement('div');
+        div.innerHTML = '<img src="http://fruskac.net/sites/all/themes/fruskac/css/img/fruskac-logo-map.png" width="100%" height="auto">';
+        div.style.width = this.tileSize.width + 'px';
+        div.style.height = this.tileSize.height + 'px';
+        div.style.opacity = '.5';
+        return div;
+    };
 
     return Map;
 
